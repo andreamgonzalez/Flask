@@ -68,4 +68,5 @@ def ask_question(qid):
 
 @app.route('/confirmation')
 def confirmation():
-    """Let user know they have cokmpleted survey"""
+    """Let user know they have completed survey"""
+    return render_template('confirmation.html)
