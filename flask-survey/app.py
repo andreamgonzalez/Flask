@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, session, flash
 from surveys import satisfaction_survey as survey
 from flask_debugtoolbar import DebugToolbarExtension
 
-ANSWERS_KEY = "answers"
+RESPONSE_KEY = "answers"
 
 app = Flask(__name__)
 app.config['SECRET_KEY']="dfsgsEGseg"
@@ -18,7 +18,7 @@ def home_page():
 @app.route('/start', methods=["POST"])
 def start_survey():
     """Clean session to store new user answers"""
-    session[ANSWERS_KEY] = []
+    session[RESPONSE_KEY] = []
     return redirect('/questions/0')
 
 @app.route('/answer', methods=["POST"])
@@ -27,14 +27,14 @@ def save_answers():
     #get an answer
     answer=request.form["answer"]
     #make session into a variable
-    answers=session[ANSWERS_KEY]
+    answers=session[RESPONSE_KEY]
     #reference session variable to append an answer
     answers.append(answer)
 
     #saves the answers into the public scope session[] for the sake of keeping
-    # a count of which question theyr on.
+    # a count of which question they're on.
 
-    session[ANSWERS_KEY] = answers
+    session[RESPONSE_KEY] = answers
 
     if(len(answers) == len(survey.questions)):
         return redirect('/confirmation')
@@ -47,7 +47,7 @@ def save_answers():
 def ask_question(qid):
     """Ask the current question in the survey using session as reference for already answered questions"""
 
-    answers=session.get(ANSWERS_KEY)
+    answers=session.get(RESPONSE_KEY)
 
     if (answers is None):
         # if there are yet no answers saved in session
